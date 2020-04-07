@@ -2,6 +2,12 @@ package guestbook.services;
 
 import guestbook.model.GuestbookEntry;
 import guestbook.repositories.JpaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
 
 public class GuestbookService {
 
@@ -9,13 +15,16 @@ public class GuestbookService {
     private RateLimiter rateLimiter;
     private JpaRepository jpaRepository;
 
-    public GuestbookService() {
-        this.spamChecker = new SpamChecker();
-        this.rateLimiter = new RateLimiter();
-        this.jpaRepository = new JpaRepository();
+    @Autowired
+    public GuestbookService(SpamChecker spamChecker,
+                            RateLimiter rateLimiter,
+                            JpaRepository jpaRepository) {
+        this.spamChecker = spamChecker;
+        this.rateLimiter = rateLimiter;
+        this.jpaRepository = jpaRepository;
     }
 
-    public void create(GuestbookEntry guestbookEntry, String ipAddress){
+    public void create(GuestbookEntry guestbookEntry, String ipAddress) {
         if (spamChecker.isSpam(guestbookEntry.getContent())) {
             throw new RuntimeException("Spam words in content");
         }
@@ -25,5 +34,10 @@ public class GuestbookService {
         }
 
         jpaRepository.save(guestbookEntry);
+    }
+
+    public List<GuestbookEntry> findAll() {
+
+        return jpaRepository.findAll();
     }
 }

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Guestbook</title>
+    <style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 5px;
+  text-align: left;
+}
+</style>
+</head>
+<body>
+<h1>
+    Guestbook
+</h1>
+
+
+
+
+<table style="width:25%">
+    <caption>GuestBook Users</caption>
+
+    <thead>
+    <tr>
+        <th> Name </th>
+        <th> Content </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${guestBookEntries.empty}">
+        <td colspan="2"> No GuestBook Entries Available </td>
+    </tr>
+    <tr th:each="user : ${guestBookEntries}">
+        <td><span th:text="${user.name}"> Name </span></td>
+        <td><span th:text="${user.content}"> Content </span></td>
+    </tr>
+    </tbody>
+</table>
+
+
+
+</body>
+</html>
